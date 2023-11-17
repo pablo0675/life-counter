@@ -1,0 +1,7 @@
+put here :
+    - GetUsers
+    - GetUser
+    - GetUserById
+    - GetToken
+    - GetPicture
+    - ...
