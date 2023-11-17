@@ -26,9 +26,6 @@ function Home({navigation}) {
     return (
         <View style={styles.container}>
             <AppIdentity/>
-            <DisplayOptions/>
-            <PhotoContainer navigation={navigation}/>
-            <WidgetContainer/>
         </View>
     );
 }

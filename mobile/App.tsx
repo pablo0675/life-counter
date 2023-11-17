@@ -5,8 +5,8 @@ import Welcome from "./pages/Welcome";
 import Login from './pages/Login'
 import Home from './pages/Home';
 import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 import StoreProvider from "./utils/StoreProvider";
-import Widget from "./pages/Widget";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,7 +19,7 @@ function App() {
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
-            <Stack.Screen name="Widget" component={Widget} options={{ headerShown: false }}/>
+            <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </StoreProvider>
