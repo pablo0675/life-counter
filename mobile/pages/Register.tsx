@@ -10,7 +10,7 @@ const AsyncStorage = require('@react-native-async-storage/async-storage').defaul
 
 global.Buffer = require('buffer').Buffer;
 
-const API_URL = 'http://localhost:8080';
+const API_URL = 'https://server-o53dp.ondigitalocean.app';
 
 let CREDENTIALS = {
     email: " ",
@@ -21,7 +21,7 @@ let CREDENTIALS = {
 async function createUser(): Promise<string | null> {
     try {
         const res = await axios.post(
-            `${API_URL}/register`,
+            `${API_URL}/auth/register`,
             CREDENTIALS,
             {
                 headers: {
@@ -35,10 +35,9 @@ async function createUser(): Promise<string | null> {
             return null;
         }
         const data = res.data;
-        return data.access_token;
+        return data;
     } catch (error) {
         alert("Error: " + error.response.data.message);
-        console.error('Error:', error);
         return null;
     }
 }
@@ -49,7 +48,7 @@ async function callApi(Email, password, username, navigation) : Promise<void> {
         return;
     }
 
-    CREDENTIALS.email = Email;
+    CREDENTIALS.email = Email.toLowerCase();
     CREDENTIALS.username = username;
     CREDENTIALS.password = password;
 
@@ -91,7 +90,7 @@ function Register({ navigation }) : JSX.Element {
                     secureTextEntry={true}
                 />
                 <Button
-                    title="Log in"
+                    title="Register"
                     loading={false}
                     loadingProps={{ size: 'small', color: 'white' }}
                     buttonStyle={styles.button}
@@ -114,12 +113,12 @@ export default Register;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.DarkLayer,
+        backgroundColor: theme.colors.Background,
         justifyContent: 'center',
         alignItems: 'center',
     },
     card: {
-        backgroundColor: theme.colors.FirstBackLayer,
+        backgroundColor: theme.colors.Card,
         borderRadius: 20,
         padding: 10,
         width: 300,
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
         marginBottom: -30,
     },
     input: {
-        backgroundColor: theme.colors.SndBackLayer,
+        backgroundColor: theme.colors.TextZone,
         color: theme.colors.White,
         textDecorationColor: theme.colors.White,
         borderRadius: 10,
@@ -155,14 +154,14 @@ const styles = StyleSheet.create({
         width: 250,
     },
     button: {
-        backgroundColor: theme.colors.FirstFrontLayer,
+        backgroundColor: theme.colors.Button,
         borderRadius: 10,
         padding: 10,
         margin: 20,
         width: 180,
     },
     buttonText: {
-        color: theme.colors.DarkLayer,
+        color: theme.colors.Background,
         textAlign: 'center',
     },
 });

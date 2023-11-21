@@ -37,7 +37,7 @@ export default Welcome;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.DarkLayer,
+        backgroundColor: theme.colors.Background,
         justifyContent: "center",
         alignItems: "center",
     },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         color: theme.colors.White,
     },
     button: {
-        backgroundColor: theme.colors.FirstFrontLayer,
+        backgroundColor: theme.colors.Button,
         padding: 15,
         borderRadius: 5,
         marginTop: 20,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        color: theme.colors.SndBackLayer,
+        color: theme.colors.White,
         fontSize: 25,
     },
     hint: {

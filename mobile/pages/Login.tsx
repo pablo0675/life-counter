@@ -9,8 +9,6 @@ const AsyncStorage = require('@react-native-async-storage/async-storage').defaul
 
 global.Buffer = require('buffer').Buffer;
 
-const API_URL = 'http://localhost:8080';
-
 let CREDENTIALS = {
     email: " ",
     password: " ",
@@ -19,8 +17,11 @@ let CREDENTIALS = {
 async function getToken(): Promise<string | null> {
     try {
         const res = await axios.post(
-            `${API_URL}/login`,
-            CREDENTIALS,
+            `https://server-o53dp.ondigitalocean.app/auth/login`,
+            {
+                email: CREDENTIALS.email,
+                password: CREDENTIALS.password,
+            },
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,15 +29,13 @@ async function getToken(): Promise<string | null> {
                 },
             }
         );
-
-        if (res.status !== 200) {
+        if (res.status !== 201) {
             return null;
         }
         const data = res.data;
-        return data.access_token;
+        return data;
     } catch (error) {
-        alert("Error: wrong password or email");
-        console.error('Error:', error);
+        alert(error.response.data.message);
         return null;
     }
 }
@@ -47,14 +46,14 @@ async function connect(Email, password, navigation) : Promise<void> {
         return;
     }
 
-    CREDENTIALS.email = Email;
+    CREDENTIALS.email = Email.toLowerCase();
     CREDENTIALS.password = password;
 
     const access_token = await getToken();
-    //if (!access_token) {return;}
+    if (!access_token)
+        return;
     try {
         await AsyncStorage.setItem('token', access_token);
-        await AsyncStorage.setItem('API_URL', API_URL);
         await AsyncStorage.setItem('email', Email);
     }
     catch (error) {
@@ -114,12 +113,12 @@ export { connect };
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.DarkLayer,
+        backgroundColor: theme.colors.Background,
         justifyContent: 'center',
         alignItems: 'center',
     },
     card: {
-        backgroundColor: theme.colors.FirstBackLayer,
+        backgroundColor: theme.colors.Card,
         borderRadius: 20,
         padding: 10,
         width: 300,
@@ -146,23 +145,23 @@ const styles = StyleSheet.create({
         marginBottom: -30,
     },
     input: {
-        backgroundColor: theme.colors.SndBackLayer,
+        backgroundColor: theme.colors.TextZone,
         color: theme.colors.White,
         textDecorationColor: theme.colors.White,
         borderRadius: 10,
         padding: 10,
-        margin: 20,
+        margin: 15,
         width: 250,
     },
     button: {
-        backgroundColor: theme.colors.FirstFrontLayer,
+        backgroundColor: theme.colors.Button,
         borderRadius: 10,
         padding: 10,
         margin: 20,
         width: 180,
     },
     buttonText: {
-        color: theme.colors.DarkLayer,
+        color: theme.colors.Background,
         textAlign: 'center',
     },
 });
