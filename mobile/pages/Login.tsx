@@ -14,7 +14,7 @@ let CREDENTIALS = {
     password: " ",
 };
 
-async function getToken(): Promise<string | null> {
+async function getToken(): Promise<any | null> {
     try {
         const res = await axios.post(
             `https://server-o53dp.ondigitalocean.app/auth/login`,
@@ -49,12 +49,16 @@ async function connect(Email, password, navigation) : Promise<void> {
     CREDENTIALS.email = Email.toLowerCase();
     CREDENTIALS.password = password;
 
-    const access_token = await getToken();
-    if (!access_token)
-        return;
+    const callResult = await getToken();
+    console.log(callResult);
+    if (callResult === null) {return;}
+    const access_token = callResult.token;
+    const user_id = callResult.id;
+
     try {
         await AsyncStorage.setItem('token', access_token);
         await AsyncStorage.setItem('email', Email);
+        await AsyncStorage.setItem('user_id', user_id.toString());
     }
     catch (error) {
         console.error('Error: ', error);

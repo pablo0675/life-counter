@@ -8,17 +8,10 @@ import AppIdentity from "../components/AppIdentity";
 const AsyncStorage = require('@react-native-async-storage/async-storage').default;
 
 interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
-    surname: string;
-    work: string;
-    gender: string;
     picture: string;
-    birth_date: string;
-    picture: string;
-    subordinates: number[];
-    subordinates_picture: string[];
 }
 
 
@@ -26,7 +19,7 @@ interface User {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.DarkLayer,
+        backgroundColor: theme.colors.Background,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -83,8 +76,6 @@ const styles = StyleSheet.create({
 });
 
 function Profile(navigation) {
-
-
     return (
         <View style={styles.container}>
             <AppIdentity/>
