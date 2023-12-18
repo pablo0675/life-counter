@@ -41,6 +41,8 @@ async function getToken(): Promise<any | null> {
 }
 
 async function connect(Email, password, navigation) : Promise<void> {
+    Email = "pablo.levy@epitech.eu"
+    password = "pabloblo"
     if (Email === '' || password === '') {
         alert("Error: empty field");
         return;

@@ -167,7 +167,7 @@ export default Home;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 3,
         backgroundColor: theme.colors.Background,
         justifyContent: 'center',
         alignItems: 'center',

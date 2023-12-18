@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import StoreProvider from "./utils/StoreProvider";
+import CreateCounter from "./pages/CreateCounter";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,7 @@ function App() {
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
             <Stack.Screen name="Register" component={Register} options={{ headerShown: false }}/>
+            <Stack.Screen name="Counters" component={CreateCounter} options={{ headerShown: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </StoreProvider>
