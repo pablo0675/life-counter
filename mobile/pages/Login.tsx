@@ -52,7 +52,6 @@ async function connect(Email, password, navigation) : Promise<void> {
     CREDENTIALS.password = password;
 
     const callResult = await getToken();
-    console.log(callResult);
     if (callResult === null) {return;}
     const access_token = callResult.token;
     const user_id = callResult.id;

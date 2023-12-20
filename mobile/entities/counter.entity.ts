@@ -1,5 +1,5 @@
 export default interface counter {
-    name: string;
+    counter_name: string;
     logo: string;
     description: string;
     baseValue: number;

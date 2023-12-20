@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import { View, TextInput, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import React, {useEffect, useState} from "react";
 import theme from "../Theme";
 
@@ -20,70 +20,104 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.Background,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
     },
-    logo: {
-        width: 100,
-        height: 100,
-    },
-    text: {
-        fontSize: 15,
+    textInput: {
+        backgroundColor: theme.colors.TextZone,
         color: theme.colors.White,
-        marginLeft: 5,
-        marginTop: 40,
+        padding: 10,
+        borderRadius: 5,
+        marginBottom: 10,
+        width: '100%',
     },
-    photo: {
-        width: 170,
-        height: 280,
-    },
-    linkText: {
-        color: 'white',
-        textDecorationLine: 'underline',
-        fontSize: 20,
-    },
-    profileContainer: {
+    cardHeader: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 16,
+    },
+    description: {
+        fontSize: 14,
+        color: 'gray',
+        marginLeft: 12,
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginLeft: 12,
+    },
+    card: {
+        alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative',
-        top: -65,
-        left: -20,
-    },
-    job: {
-        fontSize: 15,
-        color: theme.colors.White,
-        marginLeft: 5,
-    },
-    subordinates: {
-        fontSize: 20,
-        color: theme.colors.White,
-        marginLeft: 5,
-        position: 'relative',
-        top: -60,
-        left: -120,
-    },
-    surbordinatesPictures: {
-        width: 10,
-        height: 10,
-        flexDirection: 'column',
+        backgroundColor: theme.colors.Background
     },
     button: {
-        position: 'absolute',
-        top: 90,
-        left: 10,
+        backgroundColor: theme.colors.Button,
+        padding: 15,
+        borderRadius: 5,
+        alignItems: 'center',
+        width: '100%',
+    },
+    buttonText: {
+        color: theme.colors.White,
+        textAlign: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: 'gray',
+        padding: 8,
+        borderRadius: 4,
+        marginBottom: 16,
+    },
+    avatar: {
+        height: 48,
+        width: 48,
+        borderRadius: 24,
     }
 });
 
 function Profile(navigation) {
+    const [userInfo, setUserInfo] = useState({name: '', email: '', password: ''});
+
+    const handleSave = () => {
+        console.log('Informations enregistrées:', userInfo);
+    };
+
     return (
         <View style={styles.container}>
-            <AppIdentity/>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigation.goBack()}>
-                <Text style={styles.linkText}>{ "< go back" } </Text>
-            </TouchableOpacity>
+            <View style={styles.card}>
+                <View style={styles.cardHeader}>
+                    <Image
+                        style={styles.avatar}
+                        source={{uri: '/placeholder-avatar.jpg'}}
+                    />
+                    <View>
+                        <Text style={styles.title}>Your Name</Text>
+                        <Text style={styles.description}>your.email@example.com</Text>
+                    </View>
+                </View>
+                <View>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your name"
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Enter your email"
+                        keyboardType="email-address"
+                    />
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Upload</Text>
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Save</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
+
 
 export default Profile;
