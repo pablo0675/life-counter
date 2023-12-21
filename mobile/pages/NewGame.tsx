@@ -273,6 +273,22 @@ const NewGame = ({ navigation }) => {
 
     };
 
+    const checkConfiguration = () => {
+        if (selectedCounters.length < 1) {
+            alert('Please select at least 1 counter');
+            return false;
+        }
+        if (players.length < 2) {
+            alert('Please add at least 2 players');
+            return false;
+        }
+        if (!configName) {
+            alert('Please enter a name for your configuration');
+            return false;
+        }
+        return true;
+    }
+
     const handleSaveConfiguration = async () => {
         if (!configName) {
             alert('Please enter a name for your configuration');
@@ -389,9 +405,20 @@ const NewGame = ({ navigation }) => {
                     <Text style={styles.buttonText}>Save Configuration</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Game')}>
-                    <Text style={styles.buttonText}>Start Game</Text>
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => {
+                            if (checkConfiguration()) {
+                                selectedConfiguration.counters = selectedCounters;
+                                selectedConfiguration.players = players;
+                                navigation.navigate('Game', { configuration: selectedConfiguration });
+                            }
+                        }
+                    }
+                >
+                    <Text style={styles.buttonText}>start game</Text>
                 </TouchableOpacity>
+
 
             </ScrollView>
         </View>
