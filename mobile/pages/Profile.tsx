@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import theme from "../Theme";
 
 import AppIdentity from "../components/AppIdentity";
+import GoBack from "../components/GoBack";
 
 
 const AsyncStorage = require('@react-native-async-storage/async-storage').default;
@@ -86,6 +87,7 @@ function Profile(navigation) {
 
     return (
         <View style={styles.container}>
+            <GoBack Navigation={navigation} />
             <View style={styles.card}>
                 <View style={styles.cardHeader}>
                     <Image

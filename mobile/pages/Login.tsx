@@ -4,6 +4,7 @@ import { Button } from '@rneui/themed';
 import theme from '../Theme';
 import axios from "axios";
 import logo from "../assets/logo.png";
+import GoBack from "../components/GoBack";
 
 const AsyncStorage = require('@react-native-async-storage/async-storage').default;
 
@@ -73,6 +74,7 @@ function Login({ navigation }) : JSX.Element {
 
     return (
         <View style={styles.container}>
+            <GoBack Navigation={navigation} />
             <Image source={logo} style={styles.logo} />
             <Text style={styles.text}>Life Counter</Text>
             <View style={styles.card}>

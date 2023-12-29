@@ -2,14 +2,13 @@ import React, {useEffect, useState} from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Image } from 'react-native';
 import theme from '../Theme';
 import ColorPicker from "../components/color.picker";
-import counter  from '../entities/counter.entity';
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppIdentity from "../components/AppIdentity";
 import 'react-native-get-random-values';
 import {v4 as uuidv4} from 'uuid';
 import {Picker} from "@react-native-picker/picker";
-import configuration from "../entities/configuration.entity";
+import GoBack from "../components/GoBack";
 
 
 
@@ -336,7 +335,7 @@ const NewGame = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-                <AppIdentity />
+
                 <Text style={styles.pickerTitle}>Load Configuration</Text>
                 <Picker
                     style={styles.picker}
@@ -421,6 +420,7 @@ const NewGame = ({ navigation }) => {
 
 
             </ScrollView>
+            <GoBack Navigation={navigation} />
         </View>
     );
 };

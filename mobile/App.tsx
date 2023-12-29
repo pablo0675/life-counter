@@ -10,6 +10,7 @@ import StoreProvider from "./utils/StoreProvider";
 import CreateCounter from "./pages/CreateCounter";
 import NewGame from "./pages/NewGame";
 import Game from "./pages/Game";
+import UpdateCounter from "./pages/UpdateCounter";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ function App() {
             <Stack.Screen name="Counters" component={CreateCounter} options={{ headerShown: false }}/>
             <Stack.Screen name="NewGame" component={NewGame} options={{ headerShown: false }}/>
             <Stack.Screen name="Game" component={Game} options={{ headerShown: false }}/>
+            <Stack.Screen name={"UpdateCounter"} component={UpdateCounter} options={{headerShown: false}}/>
           </Stack.Navigator>
         </NavigationContainer>
       </StoreProvider>

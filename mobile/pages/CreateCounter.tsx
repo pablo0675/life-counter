@@ -8,15 +8,16 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import Counter from '../entities/counter.entity';
 import theme from "../Theme";
 import AppIdentity from "../components/AppIdentity";
+import GoBack from "../components/GoBack";
 
-const CreateCounter = () => {
+const CreateCounter = (navigation) => {
     const [counter, setCounter] = useState<Counter>({
-        name: '',
+        counter_name: "",
         logo: '',
         description: '',
         baseValue: 0,
         maxValue: 0,
-        minValue: 0,
+        minValue: 0
     });
 
     const pickImage = async () => {
@@ -45,7 +46,7 @@ const CreateCounter = () => {
         let isAdmin = false;
         try {
             if (
-                counter.name === '' ||
+                counter.counter_name === '' ||
                 counter.description === '' ||
                 counter.baseValue === 0 ||
                 counter.logo === ''
@@ -71,7 +72,7 @@ const CreateCounter = () => {
             const response = await axios.post('https://server-o53dp.ondigitalocean.app/counter/create_counter',
                 {
                     counter: {
-                        counter_name: counter.name,
+                        counter_name: counter.counter_name,
                         description: counter.description,
                         baseValue: counter.baseValue,
                         maxValue: counter.maxValue,
@@ -89,6 +90,7 @@ const CreateCounter = () => {
 
     return (
         <View style={styles.container}>
+            <GoBack Navigation={navigation} />
             <AppIdentity />
             <TextInput
                 style={styles.textInput}

@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, TextInput, StyleSheet, Image, TouchableOpacity, ScrollView, Dimensions} from 'react-native';
 import theme from "../Theme";
+import {useNavigation} from "@react-navigation/native";
+import GoBack from "../components/GoBack";
 
 class Counter {
     id: string;
@@ -118,6 +120,7 @@ class Player {
 }
 
 function Game({ route }) {
+    const navigation = useNavigation();
     const configuration = route.params?.configuration;
     const [selectedCounter, setSelectedCounter] = useState(null);
     const [players, setPlayers] = useState([]);
@@ -234,6 +237,7 @@ function Game({ route }) {
 
     return (
         <View style={styles.gameContainer}>
+            <GoBack Navigation={navigation} />
             {players.map(renderPlayerSection)}
         </View>
     );

@@ -1,9 +1,10 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import theme from "../Theme";
 
 import AppIdentity from "../components/AppIdentity";
 import {Button} from "@rneui/themed";
+import GoBack from "../components/GoBack";
 
 
 const AsyncStorage = require('@react-native-async-storage/async-storage').default;
@@ -148,15 +149,19 @@ function Home({navigation}) {
 
             {user && (
                 <View>
-                    <Button style={styles.button} onPress={handleProfilePress}>
-                        Profile
-                    </Button>
-                    <Button style={styles.button} onPress={handleCreateCountersPress}>
-                        Create Counters
-                    </Button>
-                    <Button style={styles.button} onPress={handleNewGamePress}>
-                        New Game
-                    </Button>
+                    <GoBack Navigation={navigation} />
+                    <TouchableOpacity style={styles.button} onPress={handleProfilePress}>
+                        <Text style={styles.buttonText}>Profile {user.name}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={handleCreateCountersPress}>
+                        <Text style={styles.buttonText}>Create Counters</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={handleNewGamePress}>
+                        <Text style={styles.buttonText}>New Game</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UpdateCounter')}>
+                        <Text style={styles.buttonText}>Modify counters</Text>
+                    </TouchableOpacity>
                 </View>
             )}
         </View>
@@ -183,15 +188,17 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: theme.colors.Button,
+        color: theme.colors.White,
         padding: 15,
         borderRadius: 5,
         marginTop: 20,
-        width: '80%',
         alignItems: 'center',
     },
     buttonText: {
         color: theme.colors.White,
         fontSize: 25,
+        width: '100%',
+        textAlign: 'center',
     },
 
 });
