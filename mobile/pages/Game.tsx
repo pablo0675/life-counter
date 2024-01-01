@@ -3,6 +3,7 @@ import {View, Text, TextInput, StyleSheet, Image, TouchableOpacity, ScrollView, 
 import theme from "../Theme";
 import {useNavigation} from "@react-navigation/native";
 import GoBack from "../components/GoBack";
+//import {CustomTextInput} from "react-native-custom-keyboard-kit";
 
 class Counter {
     id: string;
@@ -167,28 +168,47 @@ function Game({ route }) {
         setInputValue(text);
     };
 
-    // function return number or null
-    const calculatrice = (input: string, baseValue: number) => {
-        const operator = (input.match(/[*+-/]/g) || [])[0];
-        const number = parseInt(input.split(operator)[1]);
-        if (operator === '*') {
-            return baseValue * number;
-        } else if (operator === '+') {
-            return baseValue + number;
-        } else if (operator === '-') {
-            return baseValue - number;
-        } else if (operator === '/') {
-            if (number === 0) {
-                return null;
-            }
-            return baseValue / number;
+
+    function parseInput(input) {
+        const regex = /^([-+*/])?\s*(-?\d+)$/;
+        const match = input.match(regex);
+
+        if (match) {
+            const operator = match[1] || null; // Récupère l'opérateur s'il est présent, sinon `null`
+            const number = parseInt(match[2], 10);
+            return { isValid: true, operator, number };
+        } else {
+            return { isValid: false, operator: null, number: null };
         }
     }
 
     const handleSubmitEditing = () => {
-        const newValue = calculatrice(inputValue, selectedCounter.value);
-        if (newValue !== null && newValue< selectedCounter.maxValue && newValue > selectedCounter.minValue) {
-            selectedCounter.setValue(newValue);
+        const { isValid, operator, number: value } = parseInput(inputValue);
+        console.log("operator", operator);
+        console.log("value", value);
+        if (!isValid) {
+            setInputValue('');
+            setSelectedCounter(null);
+            return;
+        }
+
+        if (operator) {
+            switch (operator) {
+                case '+':
+                    selectedCounter.addValue(value);
+                    break;
+                case '-':
+                    selectedCounter.addValue(-value);
+                    break;
+                case '*':
+                    selectedCounter.multiplyValue(value);
+                    break;
+                case '/':
+                    selectedCounter.divideValue(value);
+                    break;
+            }
+        } else {
+            selectedCounter.setValue(value);
         }
         setInputValue('');
         setSelectedCounter(null);
@@ -203,9 +223,9 @@ function Game({ route }) {
                         value={inputValue}
                         onChangeText={handleInputChange}
                         onSubmitEditing={handleSubmitEditing}
-                        keyboardType="phone-pad"
                         autoFocus={true}
-                        onBlur={handleSubmitEditing}                    />
+                        onBlur={handleSubmitEditing}
+                    />
                 ) : (
                     <TouchableOpacity onPress={() => handleCounterPress(counter)}>
                         <Text style={styles.counterValue}>{counter.value}</Text>

@@ -123,6 +123,9 @@ const NewGame = ({ navigation }) => {
     const [selectedCounters, setSelectedCounters] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [configName, setConfigName] = useState('');
+    const [isReadyToSave, setIsReadyToSave] = useState(false);
+    const [isNew, setIsNew] = useState(false);
+
     const [configurations, setConfigurations] = useState([
         {
             id: '1',
@@ -135,6 +138,7 @@ const NewGame = ({ navigation }) => {
             ],
         },
     ]);
+    console.log(selectedCounters.length)
     const [selectedConfiguration, setSelectedConfiguration] = useState(null);
 
 
@@ -155,7 +159,7 @@ const NewGame = ({ navigation }) => {
 
     const getCounter = async () => {
         try {
-            user_id = ""
+            user_id = "";
             try {
                 const res = await AsyncStorage.getItem('user_id')
                 if (res !== null) {
@@ -221,19 +225,18 @@ const NewGame = ({ navigation }) => {
 
 
     }
-    const selectCounter = (selectedCounter) => {
-        setSelectedCounters([...selectedCounters, selectedCounter]);
+    const selectCounter = async (selectedCounter) => {
+        await setSelectedCounters([...selectedCounters, selectedCounter]);
         const updatedAvailableCounters = availableCounters.filter(counter => counter.counter_name !== selectedCounter.counter_name);
-        setAvailableCounters(updatedAvailableCounters);
-
+        await setAvailableCounters(updatedAvailableCounters);
     };
 
-    const unselectCounter = (counter) => {
-        const updatedSelectedCounters = selectedCounters.filter(counter => counter.counter_name !== counter.counter_name);
-        setSelectedCounters(updatedSelectedCounters);
+    const unselectCounter = async (counter) => {
+        const updatedSelectedCounters = selectedCounters.filter(c => c.counter_name !== counter.counter_name);
+        await setSelectedCounters(updatedSelectedCounters);
 
         const updatedAvailableCounters = [...availableCounters, counter];
-        setAvailableCounters(updatedAvailableCounters);
+        await setAvailableCounters(updatedAvailableCounters);
     };
 
     const handleLoadConfiguration = (itemValue) => {
@@ -243,12 +246,30 @@ const NewGame = ({ navigation }) => {
             return;
         }
 
+        // First, add currently selected counters back to availableCounters
+        const updatedAvailableCounters = [...availableCounters, ...selectedCounters].filter(
+            (counter, index, self) =>
+                index === self.findIndex((t) => (
+                    t.counter_name === counter.counter_name
+                ))
+        );
+
+        // Then, update selectedCounters based on the new configuration
+        const newSelectedCounters = config.counters.filter(counter =>
+            updatedAvailableCounters.some(ac => ac.counter_name === counter.counter_name)
+        );
+
+        // Finally, update availableCounters to exclude the newly selected counters
+        const finalAvailableCounters = updatedAvailableCounters.filter(ac =>
+            !newSelectedCounters.some(cc => cc.counter_name === ac.counter_name)
+        );
+
+        setSelectedCounters(newSelectedCounters);
+        setAvailableCounters(finalAvailableCounters);
         setPlayers(config.players);
-        setSelectedCounters(config.counters);
         setConfigName(config.name);
-
-
     };
+
     const addPlayer = () => {
         setPlayers([...players, { id: Date.now().toString(), name: '', color: predefinedColors[0] }]);
 
@@ -288,21 +309,7 @@ const NewGame = ({ navigation }) => {
         return true;
     }
 
-    const handleSaveConfiguration = async () => {
-        if (!configName) {
-            alert('Please enter a name for your configuration');
-            return;
-        }
-        if (players.length < 2) {
-            alert('Please add at least 2 players');
-            return;
-        }
-
-        if (selectedCounters.length < 1) {
-            alert('Please select at least 1 counter');
-            return;
-        }
-
+    const createConfiguration = async () => {
         const configuration_id = uuidv4();
         try {
             const user_token = await AsyncStorage.getItem('token');
@@ -331,6 +338,65 @@ const NewGame = ({ navigation }) => {
         }
     }
 
+    const updateConfiguration = async () => {
+        try {
+            const user_token = await AsyncStorage.getItem('token');
+            user_id = await AsyncStorage.getItem('user_id');
+            console.log(selectedCounters.length)
+            console.log(selectedConfiguration.id)
+
+            const res = await axios.post('https://server-o53dp.ondigitalocean.app/config/update_configuration',
+                {
+                    configuration: {
+                        name: configName,
+                        user_id: user_id,
+                        players: players,
+                        counters: selectedCounters,
+                    },
+                    token: user_token,
+                    configuration_id: selectedConfiguration.id,
+                });
+            if (res.status !== 201) {
+                console.log(res);
+                alert('Error while saving configuration');
+                return;
+            }
+            alert('Configuration saved successfully');
+        } catch (error) {
+            console.log(error);
+            alert('Error while saving configuration');
+        }
+    }
+
+    const handleSaveConfiguration = async () => {
+        if (!configName) {
+            alert('Please enter a name for your configuration');
+            return;
+        }
+        if (players.length < 2) {
+            alert('Please add at least 2 players');
+            return;
+        }
+
+        if (configName === "Default" || selectedConfiguration.name === "default") {
+            alert('You cannot modify the default configuration you just need to change the name to create a new one');
+            return;
+        }
+
+        if (selectedConfiguration.id == 1) {
+            await setIsNew(true);
+        }
+        if (selectedCounters.length < 1) {
+            alert('Please select at least 1 counter');
+            return;
+        }
+        //setIsReadyToSave(true);
+        if (isNew) {
+            await createConfiguration();
+        } else {
+            await updateConfiguration();
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -374,24 +440,24 @@ const NewGame = ({ navigation }) => {
                 </TouchableOpacity>
 
                 <Text style={styles.title}>Available counters</Text>
-                <View style={{ flexDirection: "row"}} >
+                <ScrollView horizontal style={{height: 70}} >
                     {availableCounters.map(counter => (
-                        <TouchableOpacity key={counter.counter_name} style={styles.button} onPress={() => selectCounter(counter)}>
+                        <TouchableOpacity key={counter.counter_id} style={styles.button} onPress={() => selectCounter(counter)}>
                             <Text style={styles.buttonText}>{counter.counter_name}</Text>
                         </TouchableOpacity>
                     ))}
-                </View>
+                </ScrollView>
 
                 <Text style={styles.title}>Selected counters</Text>
                 <View>
                     {selectedCounters.map(counter => (
                         <TouchableOpacity key={counter.counter_name} style={styles.button} onPress={() => unselectCounter(counter)}>
-                            <Image key={counter.counter_name} source={{ uri: `data:image/png;base64,${counter.logo}` }} style={styles.counterImage} />
+                            <Image key={counter.counter_id} source={{ uri: `data:image/png;base64,${counter.logo}` }} style={styles.counterImage} />
                         </TouchableOpacity>
                     ))}
                 </View>
 
-
+                <Text style={styles.title}>Select name</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Config name"

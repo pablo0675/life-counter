@@ -128,7 +128,17 @@ function Home({navigation}) {
         getAllCounters().then((counters) => {
             setCounters(counters);
         });
+        storeUser(user).then(r => console.log("user set"));
     }, []);
+
+
+    const storeUser = async (user: User) => {
+        try {
+            await AsyncStorage.setItem('user', JSON.stringify(user));
+        } catch (error) {
+            console.error( +"test");
+        }
+    }
 
 
     const handleProfilePress = () => {
@@ -161,6 +171,9 @@ function Home({navigation}) {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('UpdateCounter')}>
                         <Text style={styles.buttonText}>Modify counters</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Welcome')}>
+                        <Text style={styles.buttonText}>Disconnect</Text>
                     </TouchableOpacity>
                 </View>
             )}

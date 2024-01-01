@@ -9,6 +9,7 @@ import Counter from '../entities/counter.entity';
 import theme from "../Theme";
 import AppIdentity from "../components/AppIdentity";
 import GoBack from "../components/GoBack";
+import goBack from "../components/GoBack";
 
 const CreateCounter = (navigation) => {
     const [counter, setCounter] = useState<Counter>({
@@ -45,6 +46,7 @@ const CreateCounter = (navigation) => {
     const handleSubmit = async () => {
         let isAdmin = false;
         try {
+            console.log(counter);
             if (
                 counter.counter_name === '' ||
                 counter.description === '' ||
@@ -94,9 +96,9 @@ const CreateCounter = (navigation) => {
             <AppIdentity />
             <TextInput
                 style={styles.textInput}
-                placeholder="Name"
+                placeholder="counter name"
                 placeholderTextColor={theme.colors.White}
-                onChangeText={text => setCounter({ ...counter, name: text })}
+                onChangeText={text => setCounter({ ...counter, counter_name: text })}
             />
             <TextInput
                 style={styles.textInput}
